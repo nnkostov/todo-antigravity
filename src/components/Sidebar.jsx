@@ -9,7 +9,7 @@ function Sidebar({ currentView, onNavigate, projects, onAddProject, theme, onTog
   };
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar glass-panel">
       <div className="user-profile">
         <div className="avatar">NK</div>
         <span className="username">Nick Kostov</span>
@@ -21,7 +21,7 @@ function Sidebar({ currentView, onNavigate, projects, onAddProject, theme, onTog
           className={`nav-item ${currentView === 'inbox' ? 'active' : ''}`}
           onClick={() => onNavigate('inbox')}
         >
-          <Inbox size={20} color="#246fe0" />
+          <Inbox size={20} className={currentView === 'inbox' ? 'text-[hsl(var(--color-primary))]' : ''} />
           <span>Inbox</span>
           <span className="count">3</span>
         </button>
@@ -29,14 +29,14 @@ function Sidebar({ currentView, onNavigate, projects, onAddProject, theme, onTog
           className={`nav-item ${currentView === 'today' ? 'active' : ''}`}
           onClick={() => onNavigate('today')}
         >
-          <Calendar size={20} color="#058527" />
+          <Calendar size={20} className={currentView === 'today' ? 'text-[hsl(var(--color-secondary))]' : ''} />
           <span>Today</span>
         </button>
         <button
           className={`nav-item ${currentView === 'upcoming' ? 'active' : ''}`}
           onClick={() => onNavigate('upcoming')}
         >
-          <CalendarDays size={20} color="#692fc2" />
+          <CalendarDays size={20} className={currentView === 'upcoming' ? 'text-[hsl(var(--color-accent))]' : ''} />
           <span>Upcoming</span>
         </button>
       </nav>

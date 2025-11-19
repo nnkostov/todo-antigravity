@@ -1,22 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Premium Color Palette - HSL */
-  /* Todoist Red: #DC4C3E -> HSL(4, 66%, 55%) approx */
-  --color-primary: 4 66% 55%;
-  --color-primary-hover: 4 66% 45%;
+  /* Futuristic Neon Palette - HSL */
+  --color-primary: 190 100% 50%;
+  /* Neon Cyan #00FFFF */
+  --color-secondary: 270 100% 60%;
+  /* Neon Purple #9D00FF */
+  --color-accent: 330 100% 60%;
+  /* Hot Pink #FF3399 */
+  --color-danger: 0 100% 60%;
+  /* Bright Red */
 
-  --color-bg-app: 0 0% 100%;
-  --color-bg-sidebar: 0 0% 98%;
-  --color-bg-hover: 0 0% 96%;
-  --color-bg-active: 0 0% 94%;
+  /* Light Mode - Clean & Airy */
+  --color-bg-app: 210 20% 98%;
+  /* Very light cool gray */
+  --color-bg-sidebar: 210 20% 96%;
+  --color-bg-card: 0 0% 100%;
+  --color-bg-hover: 210 20% 92%;
+  --color-bg-active: 210 20% 90%;
 
-  --color-text-primary: 0 0% 13%;
-  --color-text-secondary: 0 0% 40%;
-  --color-text-tertiary: 0 0% 60%;
+  --color-text-primary: 220 40% 10%;
+  --color-text-secondary: 220 20% 40%;
+  --color-text-tertiary: 220 10% 60%;
 
-  --color-border: 0 0% 92%;
-  --color-divider: 0 0% 96%;
+  --color-border: 210 20% 90%;
+  --color-divider: 210 20% 94%;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-blur: 20px;
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -28,13 +42,16 @@
   /* Typography */
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-size-sm: 13px;
-  --font-size-md: 14px;
-  --font-size-lg: 16px;
-  --font-size-xl: 20px;
+  --font-size-md: 15px;
+  /* Slightly larger */
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  /* Shadows & Glows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --glow-primary: 0 0 15px hsla(190, 100%, 50%, 0.5);
 }
 
 
@@ -47,38 +64,66 @@
 }
 
 [data-theme="dark"] {
-  --color-bg-app: 220 13% 18%;
-  /* #282c34 */
-  --color-bg-sidebar: 220 13% 14%;
-  /* #20232a */
-  --color-bg-hover: 220 13% 22%;
-  /* #32363e */
-  --color-text-primary: 0 0% 90%;
-  /* #e6e6e6 */
-  --color-text-secondary: 220 13% 65%;
-  /* #9da5b4 */
-  --color-border: 220 13% 25%;
-  /* #383c44 */
-  --color-primary: 210 100% 60%;
-  /* #3399ff */
+  /* Deep Space Dark Mode */
+  --color-bg-app: 240 30% 8%;
+  /* Deep Space Blue #0e0e1a */
+  --color-bg-sidebar: 240 30% 6%;
+  /* Darker Space Blue */
+  --color-bg-card: 240 25% 12%;
+  /* Card BG */
+  --color-bg-hover: 240 25% 16%;
+  --color-bg-active: 240 25% 20%;
+
+  --color-text-primary: 220 20% 95%;
+  --color-text-secondary: 220 15% 70%;
+  --color-text-tertiary: 220 10% 50%;
+
+  --color-border: 240 20% 20%;
+  --color-divider: 240 20% 16%;
+
+  /* Glassmorphism Dark */
+  --glass-bg: rgba(20, 20, 35, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
 body {
   font-family: var(--font-family);
-  background-color: hsl(var(--color-bg-app));
+  background: linear-gradient(135deg, hsl(var(--color-bg-app)) 0%, hsl(var(--color-bg-sidebar)) 100%);
   color: hsl(var(--color-text-primary));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
   overflow: hidden;
   user-select: none;
-  /* Desktop app feel */
 }
 
 #root {
   height: 100%;
   display: flex;
   width: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(var(--color-primary), 0.05) 0%, transparent 50%);
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-right: 1px solid var(--glass-border);
+}
+
+.glass-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: hsl(var(--color-primary));
 }
 
 button {
@@ -86,6 +131,7 @@ button {
   border: none;
   background: none;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 input {
@@ -93,6 +139,7 @@ input {
   border: none;
   outline: none;
   background: none;
+  color: inherit;
 }
 
 /* Utility classes */
@@ -124,12 +171,11 @@ input {
 /* Sidebar Styles */
 .sidebar {
   width: 280px;
-  background-color: hsl(var(--color-bg-sidebar));
   height: 100%;
   padding: var(--spacing-md) var(--spacing-sm);
   display: flex;
   flex-direction: column;
-  border-right: 1px solid hsl(var(--color-border));
+  /* Glass effect applied via class in JSX */
 }
 
 .user-profile {
@@ -139,11 +185,12 @@ input {
   padding: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 12px;
+  transition: background-color 0.2s;
 }
 
 .user-profile:hover {
-  background-color: hsl(var(--color-bg-hover));
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .avatar {
@@ -289,10 +336,19 @@ input {
 .task-item {
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) 0;
-  border-bottom: 1px solid var(--color-divider);
-  position: relative;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  border-radius: 12px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.task-item:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: var(--shadow-md);
+  border-color: hsl(var(--color-primary));
 }
 
 .task-item:hover .delete-btn {
@@ -303,22 +359,23 @@ input {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .task-edit-input {
   width: 100%;
-  background: transparent;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  padding: 2px 4px;
-  font-size: 14px;
-  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid hsl(var(--color-primary));
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 15px;
+  color: hsl(var(--color-text-primary));
   outline: none;
+  box-shadow: 0 0 10px hsla(var(--color-primary), 0.2);
 }
 
 .task-edit-input:focus {
-  border-color: var(--color-primary);
+  box-shadow: 0 0 15px hsla(var(--color-primary), 0.4);
 }
 
 .task-meta {
@@ -380,27 +437,52 @@ input {
 }
 
 .checkbox {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid var(--color-text-secondary);
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--color-text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  flex-shrink: 0;
-  margin-top: 2px;
-  transition: all 0.2s;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-/* ... existing checkbox styles ... */
 .checkbox:hover {
-  background-color: hsl(var(--color-bg-active));
+  border-color: hsl(var(--color-primary));
+  box-shadow: 0 0 8px hsla(var(--color-primary), 0.4);
 }
 
 .checkbox.checked {
-  background-color: hsl(var(--color-text-secondary));
-  border-color: hsl(var(--color-text-secondary));
+  background-color: hsl(var(--color-primary));
+  border-color: hsl(var(--color-primary));
+  box-shadow: 0 0 15px hsla(var(--color-primary), 0.6);
+}
+
+.checkbox-glow {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #fff 10%, transparent 70%);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  100% {
+    opacity: 0.6;
+    transform: scale(0.8);
+  }
 }
 
 .task-content {

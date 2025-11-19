@@ -36,12 +36,12 @@ function TaskItem({ task, onToggle, onUpdate, onDelete }) {
     return (
         <div className="task-item group">
             <div className="task-checkbox-container">
-                <input
-                    type="checkbox"
-                    checked={task.completed}
-                    onChange={() => onToggle(task.id)}
-                    className="task-checkbox"
-                />
+                <div
+                    className={`checkbox ${task.completed ? 'checked' : ''}`}
+                    onClick={() => onToggle(task.id)}
+                >
+                    {task.completed && <div className="checkbox-glow" />}
+                </div>
             </div>
 
             <div className="task-content-wrapper">
