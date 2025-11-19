@@ -1,55 +1,52 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import TaskList from './components/TaskList';
+import { useLocalStorage } from './hooks/useLocalStorage';
+
+const INITIAL_TASKS = [
+  { id: 1, content: 'Welcome to your new todo app!', completed: false, date: new Date().toISOString().split('T')[0], projectId: 'inbox' },
+  { id: 2, content: 'Try adding a new task below', completed: false, date: new Date().toISOString().split('T')[0], projectId: 'inbox' },
+  { id: 3, content: 'Mark this task as completed', completed: true, date: new Date().toISOString().split('T')[0], projectId: 'inbox' },
+];
+
+const INITIAL_PROJECTS = [
+  { id: 'home', name: 'Home', color: '#ff0000' },
+  { id: 'work', name: 'Work', color: '#00ff00' }
+];
 
 function App() {
-  const [currentView, setCurrentView] = useState('inbox'); // 'inbox', 'today', 'upcoming', or project ID
-
-  const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem('tasks');
-    return saved ? JSON.parse(saved) : [
-      { id: 1, content: 'Welcome to your new todo app!', completed: false, date: new Date().toISOString().split('T')[0], projectId: 'inbox' },
-      { id: 2, content: 'Try adding a new task below', completed: false, date: new Date().toISOString().split('T')[0], projectId: 'inbox' },
-      { id: 3, content: 'Mark this task as completed', completed: true, date: new Date().toISOString().split('T')[0], projectId: 'inbox' },
-    ];
-  });
-
-  const [projects, setProjects] = useState(() => {
-    const saved = localStorage.getItem('projects');
-    return saved ? JSON.parse(saved) : [
-      { id: 'home', name: 'Home', color: '#ff0000' },
-      { id: 'work', name: 'Work', color: '#00ff00' }
-    ];
-  });
+  const [currentView, setCurrentView] = useState('inbox');
+  const [tasks, setTasks] = useLocalStorage('tasks', INITIAL_TASKS);
+  const [projects, setProjects] = useLocalStorage('projects', INITIAL_PROJECTS);
+  const [theme, setTheme] = useLocalStorage('theme', 'light');
 
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
-  useEffect(() => {
-    localStorage.setItem('projects', JSON.stringify(projects));
-  }, [projects]);
+  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
 
   const addTask = (content) => {
+    const projectId = ['inbox', 'today', 'upcoming'].includes(currentView) ? 'inbox' : currentView;
     const newTask = {
       id: Date.now(),
       content,
       completed: false,
       date: new Date().toISOString().split('T')[0],
-      projectId: currentView === 'inbox' || currentView === 'today' || currentView === 'upcoming' ? 'inbox' : currentView,
+      projectId,
     };
     setTasks([...tasks, newTask]);
   };
 
   const toggleTask = (id) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
+    setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
   };
 
-  const deleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
+  const updateTask = (id, updates) => {
+    setTasks(tasks.map(t => t.id === id ? { ...t, ...updates } : t));
   };
+
+  const deleteTask = (id) => setTasks(tasks.filter(t => t.id !== id));
 
   const addProject = (name) => {
     const newProject = {
@@ -62,28 +59,17 @@ function App() {
 
   const getFilteredTasks = () => {
     const today = new Date().toISOString().split('T')[0];
-
-    switch (currentView) {
-      case 'inbox':
-        return tasks.filter(t => t.projectId === 'inbox');
-      case 'today':
-        return tasks.filter(t => t.date === today && !t.completed);
-      case 'upcoming':
-        return tasks.filter(t => t.date > today && !t.completed);
-      default:
-        return tasks.filter(t => t.projectId === currentView);
-    }
+    if (currentView === 'inbox') return tasks.filter(t => t.projectId === 'inbox');
+    if (currentView === 'today') return tasks.filter(t => t.date === today && !t.completed);
+    if (currentView === 'upcoming') return tasks.filter(t => t.date > today && !t.completed);
+    return tasks.filter(t => t.projectId === currentView);
   };
 
   const getViewTitle = () => {
-    switch (currentView) {
-      case 'inbox': return 'Inbox';
-      case 'today': return 'Today';
-      case 'upcoming': return 'Upcoming';
-      default:
-        const project = projects.find(p => p.id === currentView);
-        return project ? project.name : 'Tasks';
+    if (['inbox', 'today', 'upcoming'].includes(currentView)) {
+      return currentView.charAt(0).toUpperCase() + currentView.slice(1);
     }
+    return projects.find(p => p.id === currentView)?.name || 'Tasks';
   };
 
   return (
@@ -93,6 +79,8 @@ function App() {
         onNavigate={setCurrentView}
         projects={projects}
         onAddProject={addProject}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
       <main className="main-content">
         <TaskList
@@ -100,6 +88,7 @@ function App() {
           title={getViewTitle()}
           onAdd={addTask}
           onToggle={toggleTask}
+          onUpdate={updateTask}
           onDelete={deleteTask}
         />
       </main>

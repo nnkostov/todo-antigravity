@@ -1,29 +1,91 @@
-import { Check, Trash2 } from 'lucide-react';
+import { Trash2, Calendar } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 
-export default function TaskItem({ task, onToggle, onDelete }) {
+function TaskItem({ task, onToggle, onUpdate, onDelete }) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editValue, setEditValue] = useState(task.content);
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (isEditing) {
+            inputRef.current.focus();
+        }
+    }, [isEditing]);
+
+    const handleSave = () => {
+        if (editValue.trim()) {
+            onUpdate(task.id, { content: editValue });
+        } else {
+            setEditValue(task.content);
+        }
+        setIsEditing(false);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') handleSave();
+        if (e.key === 'Escape') {
+            setEditValue(task.content);
+            setIsEditing(false);
+        }
+    };
+
+    const handleDateChange = (e) => {
+        onUpdate(task.id, { date: e.target.value });
+    };
+
     return (
         <div className="task-item group">
-            <button
-                className={`checkbox ${task.completed ? 'checked' : ''}`}
-                onClick={() => onToggle(task.id)}
-            >
-                {task.completed && <Check size={12} strokeWidth={3} />}
-            </button>
-            <div className="task-content">
-                <span className={`task-text ${task.completed ? 'completed' : ''}`}>
-                    {task.content}
-                </span>
-                {task.description && (
-                    <p className="task-description">{task.description}</p>
-                )}
+            <div className="task-checkbox-container">
+                <input
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => onToggle(task.id)}
+                    className="task-checkbox"
+                />
             </div>
+
+            <div className="task-content-wrapper">
+                {isEditing ? (
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        onBlur={handleSave}
+                        onKeyDown={handleKeyDown}
+                        className="task-edit-input"
+                    />
+                ) : (
+                    <span
+                        className={`task-content ${task.completed ? 'completed' : ''}`}
+                        onDoubleClick={() => setIsEditing(true)}
+                    >
+                        {task.content}
+                    </span>
+                )}
+
+                <div className="task-meta">
+                    <div className="date-picker-container">
+                        <Calendar size={12} className="date-icon" />
+                        <input
+                            type="date"
+                            value={task.date}
+                            onChange={handleDateChange}
+                            className="date-input"
+                        />
+                    </div>
+                </div>
+            </div>
+
             <button
-                className="delete-btn"
                 onClick={() => onDelete(task.id)}
-                title="Delete task"
+                className="delete-btn opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-label="Delete task"
             >
                 <Trash2 size={16} />
             </button>
         </div>
     );
 }
+
+export default TaskItem;

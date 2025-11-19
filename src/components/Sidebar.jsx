@@ -1,6 +1,6 @@
-import { Inbox, Calendar, CalendarDays, ChevronDown, Plus } from 'lucide-react';
+import { Inbox, Calendar, CalendarDays, Plus, Hash, Sun, Moon, ChevronDown } from 'lucide-react';
 
-export default function Sidebar({ currentView, onNavigate, projects, onAddProject }) {
+function Sidebar({ currentView, onNavigate, projects, onAddProject, theme, onToggleTheme }) {
   const handleAddProject = () => {
     const name = prompt('Enter project name:');
     if (name && name.trim()) {
@@ -61,6 +61,17 @@ export default function Sidebar({ currentView, onNavigate, projects, onAddProjec
           ))}
         </div>
       </div>
+      <div className="sidebar-footer">
+        <button
+          onClick={onToggleTheme}
+          className="theme-toggle-btn"
+        >
+          {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+          <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+        </button>
+      </div>
     </aside>
   );
 }
+
+export default Sidebar;
