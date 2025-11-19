@@ -1,6 +1,13 @@
 import { Inbox, Calendar, CalendarDays, ChevronDown, Plus } from 'lucide-react';
 
-export default function Sidebar({ currentView, onNavigate }) {
+export default function Sidebar({ currentView, onNavigate, projects, onAddProject }) {
+  const handleAddProject = () => {
+    const name = prompt('Enter project name:');
+    if (name && name.trim()) {
+      onAddProject(name.trim());
+    }
+  };
+
   return (
     <aside className="sidebar">
       <div className="user-profile">
@@ -37,23 +44,21 @@ export default function Sidebar({ currentView, onNavigate }) {
       <div className="projects-section">
         <div className="section-header">
           <span>My Projects</span>
-          <Plus size={16} className="add-icon" />
+          <button className="add-icon-btn" onClick={handleAddProject}>
+            <Plus size={16} className="add-icon" />
+          </button>
         </div>
         <div className="project-list">
-          <button
-            className={`project-item ${currentView === 'home' ? 'active' : ''}`}
-            onClick={() => onNavigate('home')}
-          >
-            <span className="project-dot" style={{ color: '#ff0000' }}>•</span>
-            <span>Home</span>
-          </button>
-          <button
-            className={`project-item ${currentView === 'work' ? 'active' : ''}`}
-            onClick={() => onNavigate('work')}
-          >
-            <span className="project-dot" style={{ color: '#00ff00' }}>•</span>
-            <span>Work</span>
-          </button>
+          {projects.map(project => (
+            <button
+              key={project.id}
+              className={`project-item ${currentView === project.id ? 'active' : ''}`}
+              onClick={() => onNavigate(project.id)}
+            >
+              <span className="project-dot" style={{ color: project.color }}>•</span>
+              <span>{project.name}</span>
+            </button>
+          ))}
         </div>
       </div>
     </aside>

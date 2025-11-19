@@ -1,7 +1,7 @@
 import TaskItem from './TaskItem';
 import TaskInput from './TaskInput';
 
-export default function TaskList({ tasks, title, onAdd, onToggle }) {
+export default function TaskList({ tasks, title, onAdd, onToggle, onDelete }) {
     return (
         <div className="task-list-container">
             <header className="view-header">
@@ -12,7 +12,12 @@ export default function TaskList({ tasks, title, onAdd, onToggle }) {
                     <div className="empty-state">No tasks in {title}</div>
                 ) : (
                     tasks.map(task => (
-                        <TaskItem key={task.id} task={task} onToggle={onToggle} />
+                        <TaskItem
+                            key={task.id}
+                            task={task}
+                            onToggle={onToggle}
+                            onDelete={onDelete}
+                        />
                     ))
                 )}
 

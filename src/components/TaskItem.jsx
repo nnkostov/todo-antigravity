@@ -1,8 +1,8 @@
-import { Check } from 'lucide-react';
+import { Check, Trash2 } from 'lucide-react';
 
-export default function TaskItem({ task, onToggle }) {
+export default function TaskItem({ task, onToggle, onDelete }) {
     return (
-        <div className="task-item">
+        <div className="task-item group">
             <button
                 className={`checkbox ${task.completed ? 'checked' : ''}`}
                 onClick={() => onToggle(task.id)}
@@ -17,6 +17,13 @@ export default function TaskItem({ task, onToggle }) {
                     <p className="task-description">{task.description}</p>
                 )}
             </div>
+            <button
+                className="delete-btn"
+                onClick={() => onDelete(task.id)}
+                title="Delete task"
+            >
+                <Trash2 size={16} />
+            </button>
         </div>
     );
 }

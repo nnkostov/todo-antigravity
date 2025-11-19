@@ -265,6 +265,24 @@ input {
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) 0;
   border-bottom: 1px solid var(--color-divider);
+  position: relative;
+}
+
+.task-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn {
+  opacity: 0;
+  color: var(--color-text-tertiary);
+  transition: all 0.2s;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.delete-btn:hover {
+  color: #DC4C3E;
+  background-color: hsl(var(--color-bg-hover));
 }
 
 .checkbox {
@@ -281,6 +299,7 @@ input {
   transition: all 0.2s;
 }
 
+/* ... existing checkbox styles ... */
 .checkbox:hover {
   background-color: hsl(var(--color-bg-active));
 }
@@ -302,6 +321,19 @@ input {
 .task-text.completed {
   text-decoration: line-through;
   color: hsl(var(--color-text-tertiary));
+}
+
+.add-icon-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.add-icon-btn:hover {
+  background-color: hsl(var(--color-bg-hover));
 }
 
 /* Task Input Styles */
